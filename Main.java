@@ -1,14 +1,13 @@
 /* WORD LADDER Main.java
  * EE422C Project 3 submission by
- * Replace <...> with your actual data.
- * <Student1 Name>
- * <Student1 EID>
- * <Student1 5-digit Unique No.>
- * <Student2 Name>
- * <Student2 EID>
- * <Student2 5-digit Unique No.>
+ * <Jessica Heerboth>
+ * <jrh5728>
+ * <16355>
+ * <Kyle Garza>
+ * <kcg568>
+ * <16355>
  * Slip days used: <0>
- * Git URL:
+ * Git URL: https://github.com/EE422C-Fall-2018/project-3-bfs-dfs-pair-45.git
  * Fall 2018
  */
 
@@ -35,7 +34,6 @@ public class Main {
 			ps = System.out;			// default output to Stdout
 		}
 		initialize();
-		
 		// TODO methods to read in words, output ladder
 	}
 	
@@ -43,6 +41,8 @@ public class Main {
 		// initialize your static variables or constants here.
 		// We will call this method before running our JUNIT tests.  So call it 
 		// only once at the start of main.
+		
+		
 	}
 	
 	/**
@@ -57,13 +57,20 @@ public class Main {
 	
 	public static ArrayList<String> getWordLadderDFS(String start, String end) {
 		
+		
 		// Returned list should be ordered start to end.  Include start and end.
 		// If ladder is empty, return list with just start and end.
 		// TODO some code
 		Set<String> dict = makeDictionary();
 		// TODO more code
 		
-		return null; // replace this line later with real return
+		Node st = new Node(start);
+		Node en = new Node(end);
+		ArrayList<String> list = new ArrayList<String>();
+		
+		ArrayList<String> answer = st.dfs(st, en, list);
+		
+		return answer; // replace this line later with real return
 	}
 	
     public static ArrayList<String> getWordLadderBFS(String start, String end) {
