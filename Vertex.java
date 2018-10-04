@@ -16,11 +16,17 @@ package assignment3;
 import java.util.*;
 
 public class Vertex {
+	String word;
 	public int index;
-	private boolean discovered;
-	private Vertex parent = null;
+	public Vertex parent = null;
 	private List<Vertex> adj = new LinkedList<Vertex>();
 
+	/*TODO: whatever stuff we need for Vertex*/
+	public Vertex() 
+	{
+		
+	}
+	
 	public void addEdge(Vertex v) {
 		adj.add(v);
 	}
@@ -30,5 +36,9 @@ class Graph {
 	List<Vertex> graph;
 
 	Queue<Vertex> q = new LinkedList<Vertex>();
-
+	/*TODO: whatever stuff we need for graph*/
+	public Graph()
+	{
+		
+	}
 }

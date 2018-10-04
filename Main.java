@@ -73,8 +73,9 @@ public class Main {
 
 		//local copy so DFS and BFS can have there own visited set
 		Set<String> visited = new HashSet<String>();
-		List<String> path = new ArrayList<String>();
+		ArrayList<String> path = new ArrayList<String>();
 		
+		//does all the meat of the work
 		boolean foundLadder = DFS(start, end, visited, path);
 		
 		//if no path return ladder with just start and end
@@ -86,13 +87,11 @@ public class Main {
 			System.out.println("no word ladder can be found between " + start + " and " + end);
 			return noLadder;
 		}
-		//convert LinkedList path into arrayList, then return it
-		ArrayList<String> yesLadder = new ArrayList<String>(path);
-		return yesLadder; 
+		return path; 
 	}
 	
-	//helper function to do the recursion
-	private static boolean DFS(String start, String end, Set<String> visited, List<String> path)
+	/*DFS: helper function to do the recursion*/
+	private static boolean DFS(String start, String end, Set<String> visited, ArrayList<String> path)
 	{
 		/*Call FIND with start node, value, empty set, empty ArrayList of strings. Returns T/F
 
@@ -143,8 +142,7 @@ public class Main {
     	  Search for a node by traversing the graph from a starting node.
 	      Returns not found if node is not reachable or not in graph.
 			
-		  Each node has a 'discovered' boolean field, or can keep track of discovered
-		  nodes in a Set S.
+		  Keep track of discovered nodes in a Set S.
 		  Each node has a parent node field.
 			
 		  Add the starting node to a Queue.
@@ -159,9 +157,37 @@ public class Main {
 					mark neighbor's parent to be head (if parent != null)
 					add neighbor to queue.
 			}
-		return not found.
+		  return not found.
 		*/
+    	
+    	//local copy so DFS and BFS can have there own visited set
+		Set<String> visited = new HashSet<String>();
 		
+		//change this to the right thing, just wanted an Queue object
+		//to write the skeleton of the loop
+		Queue<Vertex> object = new LinkedList<Vertex>();
+		while(!object.isEmpty())
+		{
+			//removes Head and returns head object
+			Vertex curWord = object.remove();
+			if (curWord.word == end)
+			{
+				//return true; 
+				//TODO: Might need to make a helper BFS function
+			}
+			visited.add(curWord.word);
+			ArrayList<String> neighbors = getNeighbors(curWord.word,visited);
+			for(String nextWord: neighbors)
+			{
+				visited.add(nextWord);
+				Vertex curNeighbor = new Vertex(); //edit this with right constructor
+				if (curWord.parent != null)
+				{
+					curNeighbor.parent = curWord;
+				}
+				object.add(curNeighbor);
+			}
+		}
 		return null; // replace this line later with real return
 	}
     
@@ -187,8 +213,8 @@ public class Main {
 			for (int i = 0; i < alpha.length; i++)
 			{
 				word.setCharAt(k, alpha[i]);
-				String compareWord = word.toString().toUpperCase();
-				boolean inDict = dict.contains(compareWord);
+				String compareWord = word.toString();
+				boolean inDict = dict.contains(compareWord.toUpperCase());
 				boolean inVisited = visited.contains(compareWord.toLowerCase());
 				if (inDict && !inVisited)
 				{
@@ -199,7 +225,6 @@ public class Main {
 			//Reinitialize start when switching to next letter
 			word = new StringBuilder(start);
 		}
-		
 		return neighbors;
 	}
 
