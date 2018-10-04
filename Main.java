@@ -71,18 +71,19 @@ public class Main {
 	
 	public static ArrayList<String> getWordLadderDFS(String start, String end) {
 
-		// TODO some code
-
 		//local copy so DFS and BFS can have there own visited set
 		Set<String> visited = new HashSet<String>();
-		Queue<String> path = new LinkedList<String>();
+		List<String> path = new ArrayList<String>();
+		
 		boolean foundLadder = DFS(start, end, visited, path);
+		
 		//if no path return ladder with just start and end
 		if (!foundLadder)
 		{
 			ArrayList<String> noLadder = new ArrayList<String>();
 			noLadder.add(start);
 			noLadder.add(end);
+			System.out.println("no word ladder can be found between " + start + " and " + end);
 			return noLadder;
 		}
 		//convert LinkedList path into arrayList, then return it
@@ -91,22 +92,35 @@ public class Main {
 	}
 	
 	//helper function to do the recursion
-	private static boolean DFS(String start, String end, Set<String> visited, Queue<String> path)
+	private static boolean DFS(String start, String end, Set<String> visited, List<String> path)
 	{
-		//if start is not in VISITED SET
-			//start to VISITED
-			//add start to PATH
-				//for every neighbor of start
-					//if neighbor is not in VISITED SET
-						//recursive call boolean found = DFS(params)
-						//if (FOUND) return true
-				//out of for loop
-				//remove start from PATH
-				//return false;
-		if (!visited.contains(start))
+		/*Call FIND with start node, value, empty set, empty ArrayList of strings. Returns T/F
+
+		  FIND: Given node, value, set of visited nodes, path; returns true/false
+			  If node == null
+				  return false
+			  Add node to visited nodes set
+			  Add node to path <- different from above version
+			  If node == value
+				  return true
+			  else
+				  For every neighbor of node not in visited-nodes-set
+					  boolean found = FIND(neighbor, value) 
+					  if (found) return true;
+				  remove node from path <- different from above version
+				  return false
+		 */
+		
+		visited.add(start);
+		path.add(start);
+		
+		/*We found the ladder*/
+		if (start.equals(end))
 		{
-			visited.add(start);
-			path.add(start);
+			return true;
+		}
+		else 
+		{
 			//helper function that returns an arrayList of valid neighbors
 			ArrayList<String> neighbors = getNeighbors(start,visited);
 			for(String nextWord: neighbors)
@@ -120,36 +134,33 @@ public class Main {
 			path.remove(start);
 			return false;
 		}
-		return false;
 	}
 	
-	//helper function that returns array of Neighbors to start
-	private static ArrayList<String> getNeighbors(String start, Set<String> visited)
-	{
-		ArrayList<String> neighbors = new ArrayList<String>();
-		//brute force check all combinations and see if in dict and NOT visited
-		StringBuilder word = new StringBuilder(start);
-		for (int k = 0; k < start.length(); k++)
-		{
-			for (int i = 0; i < alpha.length; i++)
-			{
-				word.setCharAt(k, alpha[i]);
-				if (dict.contains(word) && !visited.contains(word))
-				{
-					//if in dict and not visited add to neighbors
-					neighbors.add(word.toString());
-				}
-			}
-			//Reinitialize start when switching to next letter
-			word = new StringBuilder(start);
-		}
-		
-		return neighbors;
-	}
     public static ArrayList<String> getWordLadderBFS(String start, String end) {
 		
 		// TODO some code
-		// TODO more code
+    	/*
+    	  Search for a node by traversing the graph from a starting node.
+	      Returns not found if node is not reachable or not in graph.
+			
+		  Each node has a 'discovered' boolean field, or can keep track of discovered
+		  nodes in a Set S.
+		  Each node has a parent node field.
+			
+		  Add the starting node to a Queue.
+		  Set parent of starting node to null.
+			
+		  while the queue is not empty:
+		  	Dequeue the head of the queue.
+			IF head == value, return found.
+			FOR EACH neighbor of head
+				IF neighbor has not been discovered
+					mark neighbor discovered (or add to Set S).
+					mark neighbor's parent to be head (if parent != null)
+					add neighbor to queue.
+			}
+		return not found.
+		*/
 		
 		return null; // replace this line later with real return
 	}
@@ -162,9 +173,35 @@ public class Main {
 			System.out.println(it.next());
 		}
 	}
-	// TODO
-	// Other private static methods here
-
+	
+	//private static methods here
+	
+	/*helper function that returns array of Neighbors to start*/
+	private static ArrayList<String> getNeighbors(String start, Set<String> visited)
+	{
+		ArrayList<String> neighbors = new ArrayList<String>();
+		//brute force check all combinations and see if in dict and NOT visited
+		StringBuilder word = new StringBuilder(start);
+		for (int k = 0; k < start.length(); k++)
+		{
+			for (int i = 0; i < alpha.length; i++)
+			{
+				word.setCharAt(k, alpha[i]);
+				String compareWord = word.toString().toUpperCase();
+				boolean inDict = dict.contains(compareWord);
+				boolean inVisited = visited.contains(compareWord.toLowerCase());
+				if (inDict && !inVisited)
+				{
+					//if in dict and not visited add to neighbors
+					neighbors.add(word.toString());
+				}
+			}
+			//Reinitialize start when switching to next letter
+			word = new StringBuilder(start);
+		}
+		
+		return neighbors;
+	}
 
 	/* Do not modify makeDictionary */
 	public static Set<String>  makeDictionary () {
